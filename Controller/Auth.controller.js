@@ -13,6 +13,11 @@ exports.login = async (req, res) => {
                 message: "L'email et le password ne peuvent pas être vide."
             });
         }
+        if (!user) {
+            res.status(404).send({
+                message: "L'utilisateur n'a pas été trouvé."
+            });
+        }
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur est survenue."
@@ -74,7 +79,7 @@ exports.register = async function(req, res) {
     user.sso_login = "normal";
     user.roles = null
 
-    User.create(user, async (err,data) => {
+    await User.create(user, async (err,data) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur s'est produite"
@@ -82,7 +87,8 @@ exports.register = async function(req, res) {
         }
 
         res.json({
-            statusCode: 200
+            statusCode: 200,
+            data: data
         })
     })
 }
