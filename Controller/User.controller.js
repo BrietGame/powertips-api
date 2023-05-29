@@ -1,4 +1,5 @@
 const User = require('../Model/User');
+const bcrypt = require("bcrypt");
 
 exports.getUsers = async (req, res) => {
     await User.findAll((err, user) => {
@@ -56,12 +57,22 @@ exports.getUserBy = async (req, res) => {
 }
 
 exports.createUser = async (req, res) => {
-    await User.create(req.body, (err, user) => {
-        if (req.body == null) {
-            res.status(400).send({
-                message: "Le contenu ne peut pas être vide."
-            });
-        }
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        roles: req.body.roles,
+    });
+    if (user.username == null && user.email == null && user.password == null && user.roles == null) {
+        res.status(400).send({
+            message: "Le contenu ne peut pas être vide."
+        });
+    }
+    user.password = await bcrypt.hash(req.body.password, 10);
+    user.roles = JSON.stringify(req.body.roles);
+    user.created_at = new Date();
+    user.updated_at = new Date();
+    await User.create(user, (err, user) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur est survenue."
@@ -75,12 +86,21 @@ exports.createUser = async (req, res) => {
 }
 
 exports.updateUser = async (req, res) => {
-    await User.update(req.params.userId, req.body, (err, user) => {
-        if (req.body == null) {
-            res.status(400).send({
-                message: "Le contenu ne peut pas être vide."
-            });
-        }
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        roles: req.body.roles,
+    });
+    if (user.username == null && user.email == null && user.password == null && user.roles == null) {
+        res.status(400).send({
+            message: "Le contenu ne peut pas être vide."
+        });
+    }
+    user.password = await bcrypt.hash(req.body.password, 10);
+    user.roles = JSON.stringify(req.body.roles);
+    user.updated_at = new Date();
+    await User.update(req.params.userId, user, (err, user) => {
         if (req.params.userId == null) {
             res.status(400).send({
                 message: "L'id ne peut pas être vide."

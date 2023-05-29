@@ -15,7 +15,7 @@ const User = function (user) {
 
 // GETTERS & SETTERS
 User.findAll = result => {
-    sql.query("SELECT * FROM users", (err, res) => {
+    sql.query("SELECT * FROM user", (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -25,7 +25,7 @@ User.findAll = result => {
 }
 
 User.findById = (id, result) => {
-    sql.query(`SELECT * FROM users WHERE id = ${id}`, (err, res) => {
+    sql.query(`SELECT * FROM user WHERE id = ${id}`, (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -35,7 +35,7 @@ User.findById = (id, result) => {
 }
 
 User.findByEmail = (email, result) => {
-    sql.query(`SELECT * FROM users WHERE email = '${email}'`, (err, res) => {
+    sql.query(`SELECT * FROM user WHERE email = '${email}'`, (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -45,7 +45,7 @@ User.findByEmail = (email, result) => {
 }
 
 User.findBy = (field, value, result) => {
-    sql.query(`SELECT * FROM users WHERE ${field} = ${value}`, (err, res) => {
+    sql.query(`SELECT * FROM user WHERE ${field} = ${value}`, (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -55,7 +55,7 @@ User.findBy = (field, value, result) => {
 }
 
 User.create = (newUser, result) => {
-    sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
+    sql.query("INSERT INTO user SET ?", newUser, (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -65,7 +65,7 @@ User.create = (newUser, result) => {
 }
 
 User.update = (id, user, result) => {
-    sql.query("UPDATE users SET ? WHERE id = ?", [user, id], (err, res) => {
+    sql.query("UPDATE user SET ? WHERE id = ?", [user, id], (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -75,7 +75,7 @@ User.update = (id, user, result) => {
 }
 
 User.delete = (id, result) => {
-    sql.query("DELETE FROM users WHERE id = ?", id, (err, res) => {
+    sql.query("DELETE FROM user WHERE id = ?", id, (err, res) => {
         if (err) {
             result(err, null);
             return;

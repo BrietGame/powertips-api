@@ -56,12 +56,23 @@ exports.getGuideBy = async (req, res) => {
 }
 
 exports.createGuide = async (req, res) => {
-    await Guide.create(req.body, (err, guide) => {
-        if (req.body == null) {
-            res.status(400).send({
-                message: "Le contenu ne peut pas être vide."
-            });
-        }
+    const guide = new Guide({
+        title: req.body.title,
+        excerpt: req.body.excerpt,
+        content: req.body.content,
+        media: req.body.media,
+        stats: req.body.stats,
+        status: req.body.status,
+        category_id: req.body.category_id
+    });
+    if (guide.title == null || guide.excerpt == null || guide.content == null || guide.status == null || guide.category_id == null) {
+        res.status(400).send({
+            message: "Le contenu ne peut pas être vide."
+        });
+    }
+    guide.created_at = new Date();
+    guide.updated_at = new Date();
+    await Guide.create(guide, (err, guide) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur est survenue."
@@ -75,12 +86,22 @@ exports.createGuide = async (req, res) => {
 }
 
 exports.updateGuide = async (req, res) => {
-    await Guide.update(req.params.guideId, req.body, (err, guide) => {
-        if (req.body == null) {
-            res.status(400).send({
-                message: "Le contenu ne peut pas être vide."
-            });
-        }
+    const guide = new Guide({
+        title: req.body.title,
+        excerpt: req.body.excerpt,
+        content: req.body.content,
+        media: req.body.media,
+        stats: req.body.stats,
+        status: req.body.status,
+        category_id: req.body.category_id
+    });
+    if (guide.title == null || guide.excerpt == null || guide.content == null || guide.status == null || guide.category_id == null) {
+        res.status(400).send({
+            message: "Le contenu ne peut pas être vide."
+        });
+    }
+    guide.updated_at = new Date();
+    await Guide.update(req.params.guideId, guide, (err, guide) => {
         if (req.params.guideId == null) {
             res.status(400).send({
                 message: "L'id ne peut pas être vide."

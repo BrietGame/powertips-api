@@ -77,7 +77,7 @@ exports.register = async function(req, res) {
     user.created_at = new Date();
     user.updated_at = new Date();
     user.sso_login = "normal";
-    user.roles = null
+    user.roles = JSON.stringify(user.roles);
 
     await User.create(user, async (err,data) => {
         if (err) {

@@ -56,12 +56,18 @@ exports.getCommentBy = async (req, res) => {
 }
 
 exports.createComment = async (req, res) => {
-    await Comment.create(req.body, (err, comment) => {
-        if (req.body == null) {
-            res.status(400).send({
-                message: "Le contenu ne peut pas être vide."
-            });
-        }
+    const comment = new Comment({
+        content: req.body.content,
+        user_id: req.body.user_id,
+        guide_id: req.body.guide_id
+    });
+    if (comment.content == null && comment.user_id == null && comment.guide_id == null) {
+        res.status(400).send({
+            message: "Le contenu, l'id de l'utilisateur et l'id du guide ne peuvent pas être vide."
+        });
+    }
+    comment.created_at = new Date();
+    await Comment.create(comment, (err, comment) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur est survenue."
@@ -75,8 +81,18 @@ exports.createComment = async (req, res) => {
 }
 
 exports.updateComment = async (req, res) => {
-    await Comment.update(req.params.commentId, req.body, (err, comment) => {
-        if (req.params.commentId == null && req.body == null) {
+    const comment = new Comment({
+        content: req.body.content,
+        user_id: req.body.user_id,
+        guide_id: req.body.guide_id
+    });
+    if (comment.content == null && comment.user_id == null && comment.guide_id == null) {
+        res.status(400).send({
+            message: "Le contenu, l'id de l'utilisateur et l'id du guide ne peuvent pas être vide."
+        });
+    }
+    await Comment.update(req.params.commentId, comment, (err, comment) => {
+        if (req.params.commentId == null) {
             res.status(400).send({
                 message: "L'id et le contenu ne peuvent pas être vide."
             });
