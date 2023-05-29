@@ -15,44 +15,72 @@ const User = function (user) {
 
 // GETTERS & SETTERS
 User.findAll = result => {
-    sql.query("SELECT * from users", (err, res) => {
-        if (err) return err;
-        return (null, res);
+    sql.query("SELECT * FROM user", (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 User.findById = (id, result) => {
-    sql.query(`SELECT * FROM users WHERE id = ${id}`, (err, res) => {
-        if (err) return err;
-        return (null, res);
+    sql.query(`SELECT * FROM user WHERE id = ${id}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
+User.findByEmail = (email, result) => {
+    sql.query(`SELECT * FROM user WHERE email = '${email}'`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res[0]);
     })
 }
 
 User.findBy = (field, value, result) => {
-    sql.query(`SELECT * FROM users WHERE ${field} = ${value}`, (err, res) => {
-        if (err) return err;
-        return (null, res);
+    sql.query(`SELECT * FROM user WHERE ${field} = ${value}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 User.create = (newUser, result) => {
-    sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
-        if (err) return err;
-        return (null, res);
+    sql.query("INSERT INTO user SET ?", newUser, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 User.update = (id, user, result) => {
-    sql.query("UPDATE users SET ? WHERE id = ?", [user, id], (err, res) => {
-        if (err) return err;
-        return (null, res);
+    sql.query("UPDATE user SET ? WHERE id = ?", [user, id], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 User.delete = (id, result) => {
-    sql.query("DELETE FROM users WHERE id = ?", id, (err, res) => {
-        if (err) return err;
-        return (null, res);
+    sql.query("DELETE FROM user WHERE id = ?", id, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 

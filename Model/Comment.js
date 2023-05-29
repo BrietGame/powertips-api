@@ -11,43 +11,61 @@ const Comment = function (comment) {
 // GETTERS & SETTERS
 Comment.findAll = result => {
     sql.query("SELECT * from comment", (err, res) => {
-        if (err) return err;
-        return (null, res);
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 Comment.findById = (id, result) => {
     sql.query(`SELECT * FROM comment WHERE id = ${id}`, (err, res) => {
-        if (err) return err;
-        return (null, res);
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 Comment.findBy = (field, value, result) => {
     sql.query(`SELECT * FROM comment WHERE ${field} = ${value}`, (err, res) => {
-        if (err) return err;
-        return (null, res);
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 Comment.create = (newComment, result) => {
     sql.query("INSERT INTO comment SET ?", newComment, (err, res) => {
-        if (err) return err;
-        return (null, res);
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 Comment.update = (id, comment, result) => {
     sql.query("UPDATE comment SET ? WHERE id = ?", [comment, id], (err, res) => {
-        if (err) return err;
-        return (null, res);
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 
 Comment.delete = (id, result) => {
     sql.query("DELETE FROM comment WHERE id = ?", id, (err, res) => {
-        if (err) return err;
-        return (null, res);
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
     })
 }
 

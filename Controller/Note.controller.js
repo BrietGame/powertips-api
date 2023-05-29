@@ -7,7 +7,10 @@ exports.getNotes = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(notes);
+        res.json({
+            statusCode: 200,
+            data: notes
+        })
     });
 }
 
@@ -23,7 +26,10 @@ exports.getNoteById = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(note);
+        res.json({
+            statusCode: 200,
+            data: note
+        })
     });
 }
 
@@ -42,29 +48,49 @@ exports.getNoteBy = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(note);
+        res.json({
+            statusCode: 200,
+            data: note
+        })
     });
 }
 
 exports.createNote = async (req, res) => {
-    await Note.create(req.body, (err, note) => {
-        if (req.body == null) {
-            res.status(400).send({
-                message: "Le contenu ne peut pas être vide."
-            });
-        }
+    const note = new Note({
+        score: req.body.score,
+        user_id: req.body.user_id,
+        guide_id: req.body.guide_id
+    });
+    if (note.score == null || note.user_id == null || note.guide_id == null) {
+        res.status(400).send({
+            message: "Le contenu ne peut pas être vide."
+        });
+    }
+    await Note.create(note, (err, note) => {
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(note);
+        res.status(201).json({
+            statusCode: 201,
+            data: note
+        })
     });
 }
 
 exports.updateNote = async (req, res) => {
-    await Note.update(req.params.noteId, req.body, (err, note) => {
+    const note = new Note({
+        score: req.body.score,
+        user_id: req.body.user_id,
+        guide_id: req.body.guide_id
+    });
+    if (note.score == null || note.user_id == null || note.guide_id == null) {
+        res.status(400).send({
+            message: "Le contenu ne peut pas être vide."
+        });
+    }
+    await Note.update(req.params.noteId, note, (err, note) => {
         if (req.body == null) {
             res.status(400).send({
                 message: "Le contenu ne peut pas être vide."
@@ -80,8 +106,10 @@ exports.updateNote = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(note);
+        res.json({
+            statusCode: 200,
+            data: note
+        })
     });
 }
 
@@ -97,7 +125,8 @@ exports.deleteNote = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(note);
+        res.json({
+            statusCode: 200
+        })
     });
 }
