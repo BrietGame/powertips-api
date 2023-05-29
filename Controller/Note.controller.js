@@ -7,7 +7,10 @@ exports.getNotes = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(notes);
+        res.json({
+            statusCode: 200,
+            data: notes
+        })
     });
 }
 
@@ -23,7 +26,10 @@ exports.getNoteById = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(note);
+        res.json({
+            statusCode: 200,
+            data: note
+        })
     });
 }
 
@@ -42,7 +48,10 @@ exports.getNoteBy = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(note);
+        res.json({
+            statusCode: 200,
+            data: note
+        })
     });
 }
 
@@ -58,8 +67,10 @@ exports.createNote = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(note);
+        res.status(201).json({
+            statusCode: 201,
+            data: note
+        })
     });
 }
 
@@ -80,8 +91,10 @@ exports.updateNote = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(note);
+        res.json({
+            statusCode: 200,
+            data: note
+        })
     });
 }
 
@@ -97,7 +110,8 @@ exports.deleteNote = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(note);
+        res.json({
+            statusCode: 200
+        })
     });
 }

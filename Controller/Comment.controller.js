@@ -7,7 +7,10 @@ exports.getComments = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(comments);
+        res.json({
+            statusCode: 200,
+            data: comments
+        })
     });
 }
 
@@ -23,7 +26,10 @@ exports.getCommentById = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(comment);
+        res.json({
+            statusCode: 200,
+            data: comment
+        })
     });
 }
 
@@ -42,7 +48,10 @@ exports.getCommentBy = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(comment);
+        res.json({
+            statusCode: 200,
+            data: comment
+        })
     });
 }
 
@@ -58,8 +67,10 @@ exports.createComment = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(comment);
+        res.status(201).json({
+            statusCode: 201,
+            data: comment
+        })
     });
 }
 
@@ -75,8 +86,10 @@ exports.updateComment = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(comment);
+        res.json({
+            statusCode: 200,
+            data: comment
+        })
     });
 }
 
@@ -92,7 +105,9 @@ exports.deleteComment = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(comment);
+        res.json({
+            statusCode: 200,
+            data: comment
+        })
     });
 }

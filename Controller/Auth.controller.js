@@ -5,38 +5,40 @@ const jsonwebtoken = require("jsonwebtoken");
 const secret = "secret";
 
 exports.login = async (req, res) => {
-    const token = jsonwebtoken.sign({
-        email: req.body.email
-    }, secret, {
-        expiresIn: "3h"
-    })
-
-    console.info("Token: " + token);
-
     let passwordIsValid;
 
-    await User.findBy({
-        field: "email",
-        value: req.body.email
-    }, (err, user) => {
-       if (err) {
-           res.status(500).send({
-               message: err.message || "Une erreur est survenue."
-           });
-       }
-       passwordIsValid = bcrypt.compare(req.body.password, user.password);
-       if (passwordIsValid) {
-           // TODO: update refresh token in database
-          res.status(200).send({
+    await User.findByEmail(req.body.email, async (err, user) => {
+        if (req.body.email == null && req.body.password == null) {
+            res.status(400).send({
+                message: "L'email et le password ne peuvent pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+
+        passwordIsValid = await bcrypt.compare(req.body.password, user.password);
+        if (passwordIsValid) {
+            const token = jsonwebtoken.sign({
+                email: req.body.email
+            }, secret, {
+                expiresIn: "3h"
+            })
+
+            console.info("Token: " + token);
+            // TODO: update refresh token in database
+            res.status(200).send({
                 auth: true,
                 token: token
-          });
-       } else {
-          res.status(401).send({
-            auth: false,
-            token: null
-          });
-       }
+            });
+        } else {
+            res.status(401).send({
+                auth: false,
+                token: null
+            });
+        }
     });
 }
 
@@ -48,15 +50,39 @@ exports.logout = async (req, res) => {
     });
 }
 
-exports.register = async (user, res) => {
-    user.password = bcrypt.hash(user.password, 10);
+exports.register = async function(req, res) {
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        roles: req.body.roles
+    })
 
-    await User.create(user, (err, user) => {
+
+    if (!user.username || !user.email || !user.password || !user.roles) {
+        res.status(400).send({
+            message: "Les champs ne sont pas correctement remplis"
+        })
+    }
+
+    // Crypt password
+    user.password = await bcrypt.hash(user.password, 10);
+
+    // Add dates
+    user.created_at = new Date();
+    user.updated_at = new Date();
+    user.sso_login = "normal";
+    user.roles = null
+
+    User.create(user, async (err,data) => {
         if (err) {
             res.status(500).send({
-                message: err.message || "Une erreur est survenue."
-            });
+                message: err.message || "Une erreur s'est produite"
+            })
         }
-        res.send(user);
-    });
+
+        res.json({
+            statusCode: 200
+        })
+    })
 }

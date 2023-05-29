@@ -7,7 +7,10 @@ exports.getGuides = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(guides);
+        res.json({
+            statusCode: 200,
+            data: guides
+        })
     });
 }
 
@@ -23,7 +26,10 @@ exports.getGuideById = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(guide);
+        res.json({
+            statusCode: 200,
+            data: guide
+        })
     });
 }
 
@@ -42,7 +48,10 @@ exports.getGuideBy = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(guide);
+        res.json({
+            statusCode: 200,
+            data: guide
+        })
     });
 }
 
@@ -58,8 +67,10 @@ exports.createGuide = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(guide);
+        res.status(201).json({
+            statusCode: 201,
+            data: guide
+        })
     });
 }
 
@@ -80,8 +91,10 @@ exports.updateGuide = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(guide);
+        res.json({
+            statusCode: 200,
+            data: guide
+        })
     });
 }
 
@@ -97,7 +110,9 @@ exports.deleteGuide = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        res.send(guide);
+        res.json({
+            statusCode: 200,
+            data: guide
+        })
     });
 }

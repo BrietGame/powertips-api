@@ -7,7 +7,10 @@ exports.getCategories = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(categories);
+        res.json({
+            statusCode: 200,
+            data: categories
+        })
     });
 }
 
@@ -23,7 +26,10 @@ exports.getCategoryById = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(category);
+        res.json({
+            statusCode: 200,
+            data: category
+        })
     });
 }
 
@@ -42,7 +48,10 @@ exports.getCategoryBy = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(category);
+        res.json({
+            statusCode: 200,
+            data: category
+        })
     });
 }
 
@@ -58,7 +67,10 @@ exports.createCategory = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(category);
+        res.status(201).json({
+            statusCode: 201,
+            data: category
+        })
     });
 }
 
@@ -79,7 +91,10 @@ exports.updateCategory = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(category);
+        res.json({
+            statusCode: 200,
+            data: category
+        })
     });
 }
 
@@ -95,6 +110,9 @@ exports.deleteCategory = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
-        res.send(category);
+        res.json({
+            statusCode: 200,
+            data: category
+        })
     });
 }
