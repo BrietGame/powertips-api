@@ -13,36 +13,36 @@ exports.login = async (req, res) => {
                 message: "L'email et le password ne peuvent pas être vide."
             });
         }
-        if (!user) {
-            res.status(404).send({
-                message: "L'utilisateur n'a pas été trouvé."
-            });
-        }
         if (err) {
             res.status(500).send({
                 message: err.message || "Une erreur est survenue."
             });
         }
-
-        passwordIsValid = await bcrypt.compare(req.body.password, user.password);
-        if (passwordIsValid) {
-            const token = jsonwebtoken.sign({
-                email: req.body.email
-            }, secret, {
-                expiresIn: "3h"
-            })
-
-            console.info("Token: " + token);
-            // TODO: update refresh token in database
-            res.status(200).send({
-                auth: true,
-                token: token
+        if (!user || user == null) {
+            res.status(404).send({
+                message: "L'utilisateur n'a pas été trouvé."
             });
         } else {
-            res.status(401).send({
-                auth: false,
-                token: null
-            });
+            passwordIsValid = await bcrypt.compare(req.body.password, user.password);
+            if (passwordIsValid) {
+                const token = jsonwebtoken.sign({
+                    email: req.body.email
+                }, secret, {
+                    expiresIn: "3h"
+                })
+
+                console.info("Token: " + token);
+                // TODO: update refresh token in database
+                res.status(200).send({
+                    auth: true,
+                    token: token
+                });
+            } else {
+                res.status(401).send({
+                    auth: false,
+                    token: null
+                });
+            }
         }
     });
 }

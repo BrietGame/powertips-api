@@ -28,7 +28,14 @@ exports.getCategoryById = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: category
+            data: category.map((category) => {
+                return {
+                    id: category.id,
+                    name: category.name,
+                    description: category.description,
+                    parent_id: category.parent_id
+                }
+            })[0]
         })
     });
 }

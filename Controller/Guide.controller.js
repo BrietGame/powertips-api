@@ -28,7 +28,18 @@ exports.getGuideById = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: guide
+            data: guide.map((guide) => {
+                return {
+                    id: guide.id,
+                    title: guide.title,
+                    excerpt: guide.excerpt,
+                    content: guide.content,
+                    media: guide.media,
+                    stats: guide.stats,
+                    status: guide.status,
+                    category_id: guide.category_id
+                }
+            })[0]
         })
     });
 }

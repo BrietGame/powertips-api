@@ -10,7 +10,14 @@ exports.getUsers = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: user
+            data: user.map((user) => {
+                return {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    roles: user.roles
+                }
+            })
         })
     });
 };
@@ -29,7 +36,15 @@ exports.getUserById = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: user
+            // Premier élément du tableau
+            data: user.map((user) => {
+                return {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    roles: user.roles
+                }
+            })[0]
         })
     });
 }
@@ -97,7 +112,7 @@ exports.updateUser = async (req, res) => {
             message: "Le contenu ne peut pas être vide."
         });
     }
-    user.password = await bcrypt.hash(req.body.password, 10);
+    user.password != null ? user.password = await bcrypt.hash(req.body.password, 10) : null;
     user.roles = JSON.stringify(req.body.roles);
     user.updated_at = new Date();
     await User.update(req.params.userId, user, (err, user) => {

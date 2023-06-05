@@ -28,7 +28,14 @@ exports.getNoteById = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: note
+            data: note.map((note) => {
+                return {
+                    id: note.id,
+                    score: note.score,
+                    user_id: note.user_id,
+                    guide_id: note.guide_id
+                }
+            })[0]
         })
     });
 }

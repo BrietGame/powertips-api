@@ -10,7 +10,10 @@ const guideRoute = require('./routes/guide');
 const noteRoute = require('./routes/note');
 const userRoute = require('./routes/user');
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 app.use(BodyParser.json({ limit: '50mb' }));
 app.use(BodyParser.urlencoded({ extended: true }));
 app.use('/auth/', authRoute);
