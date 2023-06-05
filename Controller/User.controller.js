@@ -112,7 +112,11 @@ exports.updateUser = async (req, res) => {
             message: "Le contenu ne peut pas être vide."
         });
     }
-    user.password != null ? user.password = await bcrypt.hash(req.body.password, 10) : null;
+    if (req.body.password === null) {
+        user.password = user.password;
+    } else {
+        user.password = await bcrypt.hash(req.body.password, 10);
+    }
     user.roles = JSON.stringify(req.body.roles);
     user.updated_at = new Date();
     await User.update(req.params.userId, user, (err, user) => {
