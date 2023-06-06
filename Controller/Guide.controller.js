@@ -14,6 +14,25 @@ exports.getGuides = async (req, res) => {
     });
 }
 
+exports.getGuidesByUserId = async (req, res) => {
+    await Guide.findAllByUserId(req.params.userId, (err, guides) => {
+        if (req.params.userId == null) {
+            res.status(400).send({
+                message: "L'id ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        res.json({
+            statusCode: 200,
+            data: guides
+        })
+    });
+}
+
 exports.getGuideById = async (req, res) => {
     await Guide.findById(req.params.guideId, (err, guide) => {
         if (req.params.guideId == null) {

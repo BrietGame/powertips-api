@@ -25,6 +25,16 @@ Guide.findAll = result => {
     })
 }
 
+Guide.findAllByUserId = (userId, result) => {
+    sql.query(`SELECT * FROM guide WHERE user_id = ${userId}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
 Guide.findById = (id, result) => {
     sql.query(`SELECT * FROM guide WHERE id = ${id}`, (err, res) => {
         if (err) {

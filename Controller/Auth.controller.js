@@ -26,6 +26,7 @@ exports.login = async (req, res) => {
             passwordIsValid = await bcrypt.compare(req.body.password, user.password);
             if (passwordIsValid) {
                 const token = jsonwebtoken.sign({
+                    id: user.id,
                     email: req.body.email
                 }, secret, {
                     expiresIn: "3h"
