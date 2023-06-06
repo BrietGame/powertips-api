@@ -50,6 +50,25 @@ exports.getUserById = async (req, res) => {
     });
 }
 
+exports.getUserByEmail = async (req, res) => {
+    await User.findByEmail(req.params.userEmail, (err, user) => {
+        if (req.params.userEmail == null) {
+            res.status(400).send({
+                message: "L'email ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        res.json({
+            statusCode: 200,
+            data: user != null ? user : null
+        })
+    });
+}
+
 exports.getUserBy = async (req, res) => {
     await User.findBy({
         field: req.params.field,

@@ -5,6 +5,7 @@ const auth = require('../Middleware/auth');
 
 router.get('/all', auth, UserController.getUsers);
 router.get('/:userId', auth, UserController.getUserById);
+router.get('/email/:userEmail', auth, UserController.getUserByEmail);
 router.get('/:field/:value', auth, UserController.getUserBy);
 router.post('/create', auth, UserController.createUser);
 router.put('/:userId', auth, UserController.updateUser);
