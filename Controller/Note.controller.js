@@ -40,12 +40,10 @@ exports.getNoteById = async (req, res) => {
     });
 }
 
-exports.getNoteBy = async (req, res) => {
-    await Note.findBy({
-        field: req.params.field,
-        value: req.params.value
-    }, (err, note) => {
-        if (req.params.field == null && req.params.value == null) {
+exports.getNotesByGuideId = async (req, res) => {
+    console.log(req)
+    await Note.findAllByGuideId(req.params.guideId, (err, note) => {
+        if (req.params.guideId == null) {
             res.status(400).send({
                 message: "L'id ne peut pas être vide."
             });
@@ -58,6 +56,30 @@ exports.getNoteBy = async (req, res) => {
         res.json({
             statusCode: 200,
             data: note
+        })
+    });
+}
+
+exports.getMoyenneByGuideId = async (req, res) => {
+    await Note.findAllByGuideId(req.params.guideId, (err, note) => {
+        if (req.params.guideId == null) {
+            res.status(400).send({
+                message: "L'id ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        let moyenne = 0;
+        note.forEach(element => {
+            moyenne += element.score;
+        });
+        moyenne = moyenne / note.length;
+        res.json({
+            statusCode: 200,
+            data: moyenne
         })
     });
 }

@@ -38,6 +38,23 @@ Note.findBy = (field, value, result) => {
     })
 }
 
+Note.findAllByGuideId = (id, result) => {
+    sql.query(`SELECT * FROM note WHERE guide_id = ${id}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res.map((note) => {
+            return {
+                id: note.id,
+                score: note.score,
+                user_id: note.user_id,
+                guide_id: note.guide_id
+            }
+        }))
+    })
+}
+
 Note.create = (newNote, result) => {
     sql.query("INSERT INTO note SET ?", newNote, (err, res) => {
         if (err) {

@@ -9,6 +9,7 @@ const Guide = function (guide) {
     this.stats = guide.stats;
     this.status = guide.status;
     this.category_id = guide.category_id;
+    this.user_id = guide.user_id;
     this.created_at = guide.created_at;
     this.updated_at = guide.updated_at;
 }

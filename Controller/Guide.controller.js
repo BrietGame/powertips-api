@@ -37,7 +37,10 @@ exports.getGuideById = async (req, res) => {
                     media: guide.media,
                     stats: guide.stats,
                     status: guide.status,
-                    category_id: guide.category_id
+                    category_id: guide.category_id,
+                    user_id: guide.user_id,
+                    created_at: guide.created_at,
+                    updated_at: guide.updated_at
                 }
             })[0]
         })
@@ -71,12 +74,13 @@ exports.createGuide = async (req, res) => {
         title: req.body.title,
         excerpt: req.body.excerpt,
         content: req.body.content,
-        media: req.body.media,
-        stats: req.body.stats,
-        status: req.body.status,
+        media: req.body.media != null ? req.body.media : null,
+        stats: req.body.stats != null ? req.body.stats : null,
+        status: req.body.status != null ? req.body.status : 'WAITING',
+        user_id: req.body.user_id,
         category_id: req.body.category_id
     });
-    if (guide.title == null || guide.excerpt == null || guide.content == null || guide.status == null || guide.category_id == null) {
+    if (guide.title == null || guide.excerpt == null || guide.content == null || guide.user_id == null || guide.category_id == null) {
         res.status(400).send({
             message: "Le contenu ne peut pas être vide."
         });

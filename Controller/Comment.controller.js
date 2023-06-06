@@ -14,6 +14,25 @@ exports.getComments = async (req, res) => {
     });
 }
 
+exports.getCommentsByGuideId = async (req, res) => {
+    await Comment.findAllByGuideId(req.params.guideId, (err, comment) => {
+        if (req.params.guideId == null) {
+            res.status(400).send({
+                message: "L'id ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        res.json({
+            statusCode: 200,
+            data: comment
+        })
+    });
+}
+
 exports.getCommentById = async (req, res) => {
     await Comment.findById(req.params.commentId, (err, comment) => {
         if (req.params.commentId == null) {
