@@ -16,7 +16,9 @@ const Guide = function (guide) {
 
 // GETTERS & SETTERS
 Guide.findAll = result => {
-    sql.query("SELECT * from guide", (err, res) => {
+    sql.query(`SELECT *, guide.id AS guide_id, category.id AS category_id, user.id AS user_id FROM guide
+LEFT JOIN user ON guide.user_id = user.id
+LEFT JOIN category ON guide.category_id = category.id`, (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -26,7 +28,9 @@ Guide.findAll = result => {
 }
 
 Guide.findAllByUserId = (userId, result) => {
-    sql.query(`SELECT * FROM guide WHERE user_id = ${userId}`, (err, res) => {
+    sql.query(`SELECT *, guide.id AS guide_id, category.id AS category_id, user.id AS user_id FROM guide
+LEFT JOIN user ON guide.user_id = user.id
+LEFT JOIN category ON guide.category_id = category.id WHERE guide.user_id = ${userId}`, (err, res) => {
         if (err) {
             result(err, null);
             return;
