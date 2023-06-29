@@ -28,7 +28,22 @@ exports.getCommentsByGuideId = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: comment
+            data: comment.map((comment) => {
+                return {
+                    id: comment.id,
+                    content: comment.content,
+                    user_id: comment.user_id,
+                    guide_id: comment.guide_id,
+                    created_at: comment.created_at,
+                    user: {
+                        id: comment.user_id,
+                        username: comment.username,
+                        email: comment.email,
+                        avatar: comment.avatar,
+                        roles: comment.roles,
+                    }
+                }
+            })
         })
     });
 }
