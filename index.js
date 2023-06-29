@@ -9,6 +9,7 @@ const commentRoute = require('./routes/comment');
 const guideRoute = require('./routes/guide');
 const noteRoute = require('./routes/note');
 const userRoute = require('./routes/user');
+const reportRoute = require('./routes/report');
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -22,6 +23,7 @@ app.use('/comment/', commentRoute);
 app.use('/guide/', guideRoute);
 app.use('/note/', noteRoute);
 app.use('/user/', userRoute);
+app.use('/report/', reportRoute);
 
 app.listen(3001, () => {
     console.log('Server started on port 3001');
