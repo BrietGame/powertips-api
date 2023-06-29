@@ -48,14 +48,6 @@ exports.login = async (req, res) => {
     });
 }
 
-exports.logout = async (req, res) => {
-    // TODO: détruire le refresh token en base de données et le token jwt
-    res.status(200).send({
-        auth: false,
-        token: null
-    });
-}
-
 exports.register = async function(req, res) {
     const user = new User({
         username: req.body.username,

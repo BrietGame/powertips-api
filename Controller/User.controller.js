@@ -122,22 +122,13 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        roles: req.body.roles,
+        username: req.body.username
     });
-    if (user.username == null && user.email == null && user.password == null && user.roles == null) {
+    if (user.username == null) {
         res.status(400).send({
             message: "Le contenu ne peut pas être vide."
         });
     }
-    if (req.body.password === null) {
-        user.password = user.password;
-    } else {
-        user.password = await bcrypt.hash(req.body.password, 10);
-    }
-    user.roles = JSON.stringify(req.body.roles);
     user.updated_at = new Date();
     await User.update(req.params.userId, user, (err, user) => {
         if (req.params.userId == null) {

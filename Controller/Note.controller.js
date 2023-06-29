@@ -74,7 +74,9 @@ exports.getMoyenneByGuideId = async (req, res) => {
         }
         let moyenne = 0;
         note.forEach(element => {
-            moyenne += element.score;
+            console.log(element.score)
+            moyenne += parseInt(element.score);
+            console.log(moyenne)
         });
         moyenne = moyenne / note.length;
         res.json({

@@ -18,13 +18,10 @@ const checkToken = (req, res, next) => {
         "/api/note/update",
         "/api/note/delete"
     ]
-    console.log(req.path);
     if (!deniedPaths.includes(req.path)) {
-        console.log("Path is allowed");
         return next();
     }
     const token = req.headers["authorization"] ? req.headers["authorization"].split(" ")[1] : null;
-    console.log(token);
     if (!token) {
         return res.status(401).send("Le token n'existe pas");
     }

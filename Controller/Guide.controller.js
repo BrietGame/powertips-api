@@ -149,7 +149,7 @@ exports.createGuide = async (req, res) => {
         category_id: req.body.category_id,
         user_id: req.body.user_id
     });
-    if (guide.title == null || guide.excerpt == null || guide.content == null || guide.user_id == null || guide.category_id == null) {
+    if (guide.title == null || guide.content == null || guide.user_id == null || guide.category_id == null) {
         res.status(400).send({
             message: "Le contenu ne peut pas être vide."
         });
@@ -181,7 +181,7 @@ exports.updateGuide = async (req, res) => {
         category_id: req.body.category_id,
         user_id: req.body.user_id
     });
-    if (guide.title == null || guide.excerpt == null || guide.content == null || guide.category_id == null) {
+    if (guide.title == null || guide.content == null || guide.category_id == null) {
         res.status(400).send({
             message: "Le contenu ne peut pas être vide."
         });
