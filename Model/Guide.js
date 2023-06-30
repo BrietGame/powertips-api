@@ -8,6 +8,7 @@ const Guide = function (guide) {
     this.media = guide.media;
     this.stats = guide.stats;
     this.status = guide.status;
+    this.slug = guide.slug;
     this.category_id = guide.category_id;
     this.user_id = guide.user_id;
     this.created_at = guide.created_at;
@@ -49,8 +50,10 @@ Guide.findById = (id, result) => {
     })
 }
 
-Guide.findBy = (field, value, result) => {
-    sql.query(`SELECT * FROM guide WHERE ${field} = ${value}`, (err, res) => {
+Guide.findBySlug = (slug, result) => {
+    sql.query(`SELECT *, guide.id AS guide_id, category.id AS category_id, user.id AS user_id FROM guide
+LEFT JOIN user ON guide.user_id = user.id
+LEFT JOIN category ON guide.category_id = category.id WHERE guide.slug = '${slug}'`, (err, res) => {
         if (err) {
             result(err, null);
             return;

@@ -15,7 +15,8 @@ exports.getUsers = async (req, res) => {
                     id: user.id,
                     username: user.username,
                     email: user.email,
-                    roles: user.roles
+                    roles: user.roles,
+                    avatar: user.avatar
                 }
             })
         })

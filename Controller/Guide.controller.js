@@ -1,4 +1,5 @@
 const Guide = require('../Model/Guide');
+const slugify = require("slugify");
 
 exports.getGuides = async (req, res) => {
     await Guide.findAll((err, guides) => {
@@ -18,6 +19,7 @@ exports.getGuides = async (req, res) => {
                     media: guide.media,
                     stats: guide.stats,
                     status: guide.status,
+                    slug: guide.slug,
                     category_id: guide.category_id,
                     category: {
                         id: guide.category_id,
@@ -31,7 +33,7 @@ exports.getGuides = async (req, res) => {
                         avatar: guide.avatar,
                         roles: guide.roles,
                     },
-                    date: guide.created_at == guide.updated_at ? guide.created_at : guide.updated_at
+                    date: guide.created_at === guide.updated_at ? guide.created_at : guide.updated_at
                 }
             })
         })
@@ -62,6 +64,7 @@ exports.getGuidesByUserId = async (req, res) => {
                     media: guide.media,
                     stats: guide.stats,
                     status: guide.status,
+                    slug: guide.slug,
                     category_id: guide.category_id,
                     category: {
                         id: guide.category_id,
@@ -105,6 +108,7 @@ exports.getGuideById = async (req, res) => {
                     media: guide.media,
                     stats: guide.stats,
                     status: guide.status,
+                    slug: guide.slug,
                     category_id: guide.category_id,
                     user_id: guide.user_id,
                     created_at: guide.created_at,
@@ -115,14 +119,11 @@ exports.getGuideById = async (req, res) => {
     });
 }
 
-exports.getGuideBy = async (req, res) => {
-    await Guide.findBy({
-        field: req.params.field,
-        value: req.params.value
-    }, (err, guide) => {
-        if (req.params.field == null && req.params.value == null) {
+exports.getGuideBySlug = async (req, res) => {
+    await Guide.findBySlug(req.params.slug, (err, guide) => {
+        if (req.params.slug == null) {
             res.status(400).send({
-                message: "L'id ne peut pas être vide."
+                message: "Le slug ne peut pas être vide."
             });
         }
         if (err) {
@@ -132,7 +133,22 @@ exports.getGuideBy = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: guide
+            data: guide.map((guide) => {
+                return {
+                    id: guide.id,
+                    title: guide.title,
+                    excerpt: guide.excerpt,
+                    content: guide.content,
+                    media: guide.media,
+                    stats: guide.stats,
+                    status: guide.status,
+                    slug: guide.slug,
+                    category_id: guide.category_id,
+                    user_id: guide.user_id,
+                    created_at: guide.created_at,
+                    updated_at: guide.updated_at
+                }
+            })[0]
         })
     });
 }
@@ -147,7 +163,6 @@ exports.createGuide = async (req, res) => {
         status: req.body.status != null ? req.body.status : 'WAITING',
         user_id: req.body.user_id,
         category_id: req.body.category_id,
-        user_id: req.body.user_id
     });
     if (guide.title == null || guide.content == null || guide.user_id == null || guide.category_id == null) {
         res.status(400).send({
@@ -156,6 +171,19 @@ exports.createGuide = async (req, res) => {
     }
     guide.created_at = new Date();
     guide.updated_at = new Date();
+    
+    // Slug
+    guide.slug = slugify(guide.title, {
+        replacement: '-',
+        remove: /[*+~.()'"!:@]/g,
+        lower: true
+    })
+    await Guide.findBySlug(guide.slug, (err, guide) => {
+        if (guide.length > 0) {
+            guide.slug = guide.slug + '-' + (guide.length + 1);
+        }
+    });
+    
     await Guide.create(guide, (err, guide) => {
         if (err) {
             res.status(500).send({
