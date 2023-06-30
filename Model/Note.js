@@ -18,6 +18,16 @@ Note.findAll = result => {
     })
 }
 
+Note.findAllByUserId = (id, result) => {
+    sql.query(`SELECT * FROM note WHERE user_id = ${id}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
 Note.findById = (id, result) => {
     sql.query(`SELECT * FROM note WHERE id = ${id}`, (err, res) => {
         if (err) {

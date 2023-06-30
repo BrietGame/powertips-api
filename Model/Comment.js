@@ -30,6 +30,16 @@ Comment.findAllByGuideId = (id, result) => {
     })
 }
 
+Comment.findAllByUserId = (id, result) => {
+    sql.query(`SELECT * FROM comment WHERE user_id = ${id}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res)
+    });
+}
+
 Comment.findById = (id, result) => {
     sql.query(`SELECT * FROM comment WHERE id = ${id}`, (err, res) => {
         if (err) {

@@ -105,7 +105,7 @@ exports.createUser = async (req, res) => {
         });
     }
     user.password = await bcrypt.hash(req.body.password, 10);
-    user.roles = JSON.stringify(req.body.roles);
+    user.roles = req.body.roles != null ? JSON.stringify(req.body.roles) : JSON.stringify(["ROLE_USER"]);
     user.created_at = new Date();
     user.updated_at = new Date();
     await User.create(user, (err, user) => {

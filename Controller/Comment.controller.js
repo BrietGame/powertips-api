@@ -48,6 +48,33 @@ exports.getCommentsByGuideId = async (req, res) => {
     });
 }
 
+exports.getCommentsByUserId = async (req, res) => {
+    await Comment.findAllByUserId(req.params.userId, (err, comment) => {
+        if (req.params.userId == null) {
+            res.status(400).send({
+                message: "L'id ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        res.json({
+            statusCode: 200,
+            data: comment.map((comment) => {
+                return {
+                    id: comment.id,
+                    content: comment.content,
+                    user_id: comment.user_id,
+                    guide_id: comment.guide_id,
+                    created_at: comment.created_at
+                }
+            })
+        })
+    });
+}
+
 exports.getCommentById = async (req, res) => {
     await Comment.findById(req.params.commentId, (err, comment) => {
         if (req.params.commentId == null) {

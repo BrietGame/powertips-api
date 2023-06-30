@@ -131,11 +131,12 @@ exports.getGuideBySlug = async (req, res) => {
                 message: err.message || "Une erreur est survenue."
             });
         }
+        console.log(guide);
         res.json({
             statusCode: 200,
             data: guide.map((guide) => {
                 return {
-                    id: guide.id,
+                    id: guide.guide_id,
                     title: guide.title,
                     excerpt: guide.excerpt,
                     content: guide.content,
@@ -206,6 +207,7 @@ exports.updateGuide = async (req, res) => {
         media: req.body.media,
         stats: req.body.stats,
         status: req.body.status,
+        slug: req.body.slug,
         category_id: req.body.category_id,
         user_id: req.body.user_id
     });
@@ -215,6 +217,8 @@ exports.updateGuide = async (req, res) => {
         });
     }
     guide.status = req.body.status != null ? req.body.status : 'WAITING';
+    
+    
     guide.updated_at = new Date();
     await Guide.update(req.params.guideId, guide, (err, guide) => {
         if (req.params.guideId == null) {

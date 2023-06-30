@@ -14,6 +14,32 @@ exports.getNotes = async (req, res) => {
     });
 }
 
+exports.getNotesByUserId = async (req, res) => {
+    await Note.findAllByUserId(req.params.userId, (err, note) => {
+        if (req.params.userId == null) {
+            res.status(400).send({
+                message: "L'id ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        res.json({
+            statusCode: 200,
+            data: note.map((note) => {
+                return {
+                    id: note.id,
+                    score: note.score,
+                    user_id: note.user_id,
+                    guide_id: note.guide_id
+                }
+            })
+        })
+    });
+}
+
 exports.getNoteById = async (req, res) => {
     await Note.findById(req.params.noteId, (err, note) => {
         if (req.params.noteId == null) {
