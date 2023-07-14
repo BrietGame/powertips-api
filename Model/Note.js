@@ -9,7 +9,9 @@ const Note = function (note) {
 
 // GETTERS & SETTERS
 Note.findAll = result => {
-    sql.query("SELECT * from note", (err, res) => {
+    sql.query(`SELECT * from note
+            LEFT JOIN user ON note.user_id = user.id
+            LEFT JOIN guide ON note.guide_id = guide.id`, (err, res) => {
         if (err) {
             result(err, null);
             return;

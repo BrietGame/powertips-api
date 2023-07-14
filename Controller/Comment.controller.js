@@ -9,7 +9,23 @@ exports.getComments = async (req, res) => {
         }
         res.json({
             statusCode: 200,
-            data: comments
+            data: comments.map((comment) => {
+                return {
+                    id: comment.id,
+                    content: comment.content,
+                    user: {
+                        id: comment.user_id,
+                        username: comment.username,
+                        avatar: comment.avatar
+                    },
+                    guide: {
+                        id: comment.guide_id,
+                        title: comment.title,
+                        slug: comment.slug
+                    },
+                    created_at: comment.created_at,
+                }
+            })
         })
     });
 }

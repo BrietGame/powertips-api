@@ -10,7 +10,9 @@ const Comment = function (comment) {
 
 // GETTERS & SETTERS
 Comment.findAll = result => {
-    sql.query("SELECT * from comment", (err, res) => {
+    sql.query(`SELECT *, guide.content AS guide_content from comment
+            LEFT JOIN user ON comment.user_id = user.id
+            LEFT JOIN guide ON comment.guide_id`, (err, res) => {
         if (err) {
             result(err, null);
             return;
