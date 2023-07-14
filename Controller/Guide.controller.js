@@ -85,6 +85,50 @@ exports.getGuidesByUserId = async (req, res) => {
     });
 }
 
+exports.getGuidesByCategoryId = async (req, res) => {
+    await Guide.findAllByCategoryId(req.params.categoryId, (err, guides) => {
+        if (req.params.categoryId == null) {
+            res.status(400).send({
+                message: "L'id ne peut pas être vide."
+            });
+        }
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Une erreur est survenue."
+            });
+        }
+        res.json({
+            statusCode: 200,
+            data: guides.map((guide) => {
+                return {
+                    id: guide.guide_id,
+                    title: guide.title,
+                    excerpt: guide.excerpt,
+                    content: guide.content,
+                    media: guide.media,
+                    stats: guide.stats,
+                    status: guide.status,
+                    slug: guide.slug,
+                    category_id: guide.category_id,
+                    category: {
+                        id: guide.category_id,
+                        name: guide.name,
+                    },
+                    user_id: guide.user_id,
+                    user: {
+                        id: guide.user_id,
+                        username: guide.username,
+                        email: guide.email,
+                        avatar: guide.avatar,
+                        roles: guide.roles,
+                    },
+                    date: guide.created_at == guide.updated_at ? guide.created_at : guide.updated_at
+                }
+            })
+        })
+    });
+}
+
 exports.getGuideById = async (req, res) => {
     await Guide.findById(req.params.guideId, (err, guide) => {
         if (req.params.guideId == null) {

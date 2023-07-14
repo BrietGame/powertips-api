@@ -40,6 +40,18 @@ LEFT JOIN category ON guide.category_id = category.id WHERE guide.user_id = ${us
     })
 }
 
+Guide.findAllByCategoryId = (categoryId, result) => {
+    sql.query(`SELECT *, guide.id AS guide_id, category.id AS category_id, user.id AS user_id FROM guide
+LEFT JOIN user ON guide.user_id = user.id
+LEFT JOIN category ON guide.category_id = category.id WHERE guide.category_id = ${categoryId}`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
 Guide.findById = (id, result) => {
     sql.query(`SELECT * FROM guide WHERE id = ${id}`, (err, res) => {
         if (err) {
