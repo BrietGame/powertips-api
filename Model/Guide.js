@@ -52,9 +52,23 @@ LEFT JOIN category ON guide.category_id = category.id WHERE guide.category_id = 
     })
 }
 
+Guide.findByQuery = (query, result) => {
+    sql.query(`SELECT *, guide.id AS guide_id, category.id AS category_id, user.id AS user_id FROM guide
+LEFT JOIN user ON guide.user_id = user.id
+LEFT JOIN category ON guide.category_id = category.id WHERE (guide.title LIKE '%${query.data}%' OR guide.excerpt LIKE '%${query.data}%' OR guide.content LIKE '%${query.data}%' OR guide.slug LIKE '%${query.data}%' OR category.name LIKE '%${query.data}%' OR user.username LIKE '%${query.data}%' OR user.email LIKE '%${query.data}%')
+AND (guide.category_id = COALESCE(${query.category}, category_id))`, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
 Guide.findById = (id, result) => {
     sql.query(`SELECT * FROM guide WHERE id = ${id}`, (err, res) => {
         if (err) {
+            console.log("error: ", err);
             result(err, null);
             return;
         }

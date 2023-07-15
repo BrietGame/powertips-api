@@ -6,6 +6,7 @@ const auth = require('../Middleware/auth');
 router.get('/all', auth, GuideController.getGuides);
 router.get('/all/:userId', auth, GuideController.getGuidesByUserId);
 router.get('/all/category/:categoryId', auth, GuideController.getGuidesByCategoryId);
+router.post('/all/search/', auth, GuideController.getGuidesByQuery);
 router.get('/:guideId', auth, GuideController.getGuideById);
 router.get('/slug/:slug', auth, GuideController.getGuideBySlug);
 router.post('/create', auth, GuideController.createGuide);
