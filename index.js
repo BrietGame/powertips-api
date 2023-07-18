@@ -12,7 +12,8 @@ const userRoute = require('./routes/user');
 const reportRoute = require('./routes/report');
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    // Plusieurs origines autorisées
+    origin: ['http://localhost:5173', 'https://powertips.alexisbriet.fr/'],
     credentials: true
 }));
 app.use(BodyParser.json({ limit: '50mb' }));
